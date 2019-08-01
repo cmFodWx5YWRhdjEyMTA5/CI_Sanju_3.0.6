@@ -1,0 +1,326 @@
+@charset "utf-8";
+/* CSS Document */
+
+@font-face {
+    font-family: 'kruti_dev_010regular';
+    src: url('k010-webfont.eot');
+    src: url('k010-webfont.eot?#iefix') format('embedded-opentype'),
+         url('k010-webfont.woff2') format('woff2'),
+         url('k010-webfont.woff') format('woff'),
+         url('k010-webfont.ttf') format('truetype'),
+         url('k010-webfont.svg#kruti_dev_010regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+/*============================================================================================*/
+.video-container {
+position: relative;
+padding-bottom: 56.25%;
+padding-top: 30px; height: 0; overflow: hidden;
+}
+
+.video-container iframe,
+.video-container object,
+.video-container embed {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+
+}
+
+.bg_utube {
+        position: fixed;
+        z-index: -99999;
+        -webkit-user-select: none;
+        user-select: none;
+        width: 100%;
+        height: 100%;
+        -ms-transform: scale(2,3);
+      -webkit-transform: scale(2,3);
+      transform: scale(2,3);
+    }
+/*============================================================================================*/
+.decor{
+	font-family:kruti_dev_010regular;
+	font-size:20px;
+	color:#000;
+}
+
+@font-face {
+    font-family: "Font1";
+    src: url("kruti-dev-010-webfont.woff");
+}
+
+.dev010{
+	font-family:Font1;
+	font-size: 20px;
+	}
+
+@font-face {src: url('MANGAL.ttf');font-family: 'myFont';}
+
+.mydiv{font-family:MANGAL; font-size: 20px;}
+
+#message-yellow	{
+	margin-bottom: 5px;
+	}
+.yellow-left	{
+	background: url(../img/message_yellow.gif) top left no-repeat;
+	color: #e79300;
+	font-family: Tahoma;
+	font-weight: bold;
+	padding: 0 0 0 20px;
+	}
+.yellow-left a	{
+	color: #e79300;
+	font-family: Tahoma;
+	font-weight: normal;
+	text-decoration: underline;
+	}
+.yellow-right a	{
+	cursor: pointer;
+	}
+.yellow-right	{
+	width: 55px;
+	}
+#message-blue	{
+	margin-bottom: 5px;
+	}
+.blue-left	{
+	background: url(../img/message_blue.gif) top left no-repeat;
+	color: #2e74b2;
+	font-family: Tahoma;
+	font-weight: bold;
+	padding: 0 0 0 20px;
+	}
+.blue-left a	{
+	color: #2e74b2;
+	font-family: Tahoma;
+	font-weight: normal;
+	text-decoration: underline;
+	}
+.blue-right a	{
+	cursor: pointer;
+	}
+.blue-right	{
+	width: 55px;
+	}
+#message-red	{
+	margin-bottom: 5px;
+	}
+.red-left{
+	color: #ce2700;
+	font-family: Tahoma;
+	font-weight: bold;
+	padding: 0px 0px 5px 20px
+	}
+.red-left a	{
+	color: #ce2700;
+	font-family: Tahoma;
+	font-weight: normal;
+	text-decoration: underline;
+	}
+.red-right a	{
+	cursor: pointer;
+	}
+.red-right	{
+	width: 55px;
+	}
+#message-green	{
+	margin-bottom: 5px;
+	}
+.green-left	{
+	background: url(../img/message_green.gif) top left no-repeat;
+	color: #6da827;
+	font-family: Tahoma;
+	font-weight: bold;
+	line-height: 12px;
+	padding: 0 0 0 20px;
+	}
+.green-left a	{
+	color: #6da827;
+	font-family: Tahoma;
+	font-weight: normal;
+	text-decoration: underline;
+	}
+.green-right a	{
+	cursor: pointer;
+	}
+.green-right	{
+	width: 55px;
+	}
+	
+	
+
+	
+.error-message	{
+	list-style: outside none none;
+	color: #ce2700;
+	font-family: Tahoma;
+	font-weight: bold;
+	padding: 4px 0 0 20px;
+	background:url(../img/front/red-cross.png) no-repeat left 5px;
+	
+	}
+	
+.tal { text-align:left;}
+.tar { text-align:right;}
+.tac { text-align:center;}
+.taj { text-align:justify;}
+
+.cp { cursor:pointer; }
+
+.pad3{ padding:3px;}
+.pad5{ padding:5px;}
+.pad10{ padding:10px;}
+
+.padT1 { padding-top:1px;}
+.padT2 { padding-top:2px;}
+.padT3 { padding-top:3px;}
+.padT4 { padding-top:4px;}
+.padT5 { padding-top:5px;}
+.padT7 { padding-top:7px;}
+.padT10 { padding-top:10px;}
+.padT15 { padding-top:15px;}
+.padT20 { padding-top:20px;}
+.padT25 { padding-top:25px;}
+.padT26 { padding-top:26px;}
+.padT27 { padding-top:27px;}
+.padT28 { padding-top:28px;}
+.padT30 { padding-top:30px;}
+.padT31 { padding-top:31px;}
+.padT32 { padding-top:32px;}
+.padT33 { padding-top:33px;}
+.padT34 { padding-top:34px;}
+.padT35 { padding-top:35px;}
+.padT270 { padding-top:270px;}
+
+.padB5 { padding-bottom:5px;}
+.padB10 { padding-bottom:10px;}
+.padB40 { padding-bottom:40px;}
+
+
+.padL1 { padding-left:1px;}
+.padL3 { padding-left:3px;}
+.padL5 { padding-left:5px;}
+.padL6 { padding-left:6px;}
+.padL7 { padding-left:7px;}
+.padL10 {padding-left:10px;}
+.padL15 {padding-left:15px;}
+.padL18 {padding-left:18px;}
+.padL22 { padding-left:22px}
+.padL25 { padding-left:25px;}
+.padL30 { padding-left:30px;}
+.padL35 { padding-left:35px;}
+.padL40 { padding-left:40px;}
+.padL45 { padding-left:45px;}
+.padL47 { padding-left:47px;}
+.padL50 { padding-left:50px;}
+.padL52 { padding-left:52px;}
+.padL100 { padding-left:100px;}
+.padL152 { padding-left:152px;}
+.padL252 { padding-left:200px;}
+
+.padR5 { padding-right:5px;}
+.padR10 { padding-right:10px;}
+.padR15 { padding-right:15px;}
+.padR17 { padding-right:17px;}
+.padR20 { padding-right:20px;}
+
+
+.w2p { width:2%;}
+.w3p { width:3%;}
+.w5p { width:5%;}
+.w8p { width:8%;}
+.w10p { width:10%;}
+.w12p { width:12%;}
+.w14p { width:14%;}
+.w18p { width:18%;}
+.w20p { width:20%;}
+.w22p { width:22%;}
+.w23p { width:23%;}
+.w24p { width:24%;}
+.w25p { width:25%;}
+.w26p { width:26%;}
+.w27p { width:27%;}
+.w28p { width:28%;}
+.w29p { width:29%;}
+.w30p { width:30%;}
+.w31p { width:31%;}
+.w32p { width:32%;}
+.w33p { width:33%;}
+.w34p { width:34%;}
+.w35p { width:35%;}
+.w38p { width:38%;}
+.w40p { width:40%;}
+.w45p { width:45%;}
+.w47p { width:47%;}
+.w49p { width:49%;}
+.w50p { width:50%;}
+.w52p { width:50%;}
+.w54p { width:54%;}
+.w55p { width:55%;}
+.w59p { width:59%;}
+.w65p { width:65%;}
+.w67p { width:67%;}
+.w69p { width:69%;}
+.w70p { width:70%;}
+.w75p { width:75%;}
+.w77p { width:77%;}
+.w80p { width:80%;}
+.w85p { width:85%;}
+.w100p { width:100%;}
+
+.fl { float:left;}
+.fr { float:right;}
+.cl { clear:both;}
+
+.error { background-color:#F8E0E0; }
+.clip { background:url(../img/clip.png) no-repeat -2px 3px; padding:0 0 0 14px; }
+
+/*========================================= Paging =============================================*/
+
+#paging_container8 .no_more{
+background-color: white;
+color: gray;
+cursor: default;
+}
+.ellipse{
+	float: left;
+}
+
+.page_navigation , .alt_page_navigation{
+	padding-bottom: 10px;
+}
+
+.page_navigation a, .alt_page_navigation a{
+	padding:3px 5px;
+	margin:2px;
+	color:white;
+	text-decoration:none;
+	float: left;
+	font-family: Tahoma;
+	font-size: 12px;
+	border-radius: 5px 5px 5px 5px;
+	line-height:28px;
+	min-width:28px;
+	text-align:center;
+	border: 1px solid #DDDDDD;
+	background:url(../images/paging_bg.gif) no-repeat;
+	color:#000;
+}
+
+.active_page{
+	/*background-color:#F00 !important;
+	color:black !important;*/
+	background-color:#666666 !important;
+	min-width:28px !important;
+
+}
+.myclr{
+    clear: both;
+}
+/*========================================= Paging =============================================*/

@@ -1,0 +1,349 @@
+@charset "utf-8";
+/* CSS Document */
+
+public function edit($user_id)
+	{	
+		$UserData = $this->Nair->_getSingleData('tbl_users',['user_id'=>$user_id]);
+			//$this->prd($UserData);
+		$this->load->view('edit',['UserData'=>$UserData]);
+	}
+	public function updateUser($user_id)
+	{	
+		
+		$post = $this->input->post();
+		unset($post['submit']);
+		//$this->prd($post);
+		
+		$UserData = $this->Nair->_getSingleData('tbl_users',['user_id'=>$user_id]);
+		//$this->prd($UserData);
+		if($this->form_validation->run('User_Rules') )
+		{
+				$data = array(
+					"user_fname" => $this->input->post('user_fname'),
+					"user_lname" => $this->input->post('user_lname'),
+					"user_email" => $this->input->post('user_email')
+				 );
+				 
+				 //$this->prd($data);
+			if($insert_id = $this->Nair->_update('tbl_users',$data,['user_id'=>$user_id] )){
+			   		$this->session->set_flashdata('error_msg',"Failed to Update User Data, Please try again");
+			  	}else{
+					$this->session->set_flashdata('error_msg',"User Data Update Successful");
+			}		
+//======================= Loading Image Library and Config ========================================
+				$config =	[
+						'upload_path'   => './uploads/User_Pic/',
+						'allowed_types' => 'gif|jpg|jpeg|png',
+						'file_name'     => date("d-M-Y").'__User_Pic__'.rand(10000,90000),
+						'width'			=> 750,
+						'height'			=> 750,
+					];
+					$this->load->library('upload',$config);
+					$userfile = "User_Pic";
+			
+			if ( ! $this->upload->do_upload('User_Pic')){	  
+						$error = $this->upload->display_errors();
+					 	$this->load->view('edit', compact('error'));
+					
+				}else{	
+					$uploaddir = './uploads/User_Pic/'.$UserData->user_image;
+					$Thumb_Dir = './uploads/User_Pic/User_Thumb/'.$UserData->User_Thumb;
+						//$this->prd($uploaddir);
+						@unlink($uploaddir);
+						@unlink($Thumb_Dir);
+					
+					$data = $this->upload->data();
+					$Img_Source =$data['full_path'];
+					
+					$UserPic_Name = $data['raw_name'].$data['file_ext'] ;
+					$Thumb_Name = date("d-M-Y").'__'.'User_Thumb'.'__'.rand(10000,9000).$data['file_ext'];
+					$thumb_Save = 'uploads/User_Pic/User_Thumb/'.$Thumb_Name;
+		
+					$this->resize_img($Img_Source, $thumb_Save,'250','250');
+						
+						$post['user_image'] = $UserPic_Name;
+						$post['User_Thumb'] = $Thumb_Name;
+						
+					$this->Nair->_update('tbl_users',$post,['user_id'=>$user_id] );
+						
+					
+					
+				}
+		return redirect('user/dashboard');
+		}else{
+				$this->load->view('user/edit/'.$user_id);	
+		}
+		
+	}
+	
+	public function usertemp()
+	{	
+		$this->load->library('pagination');
+		
+		$config = 	[
+						'base_url'			=>base_url('user/usertemp'),
+						'per_page'			=>5,
+						'total_rows'		=>	$this->Nair->num_rows('nair_temple',['Post_By'=>$this->session->userdata('UserName')]),
+						'full_tag_open'		=>	"<ul class='pagination'>",
+						'full_tag_close'	=>	"</ul>",
+						'first_tag_open'	=>	'<li>',
+						'first_tag_close'	=>	'</li>',
+						'last_tag_open'		=>	'<li>',
+						'last_tag_close'	=>	'</li>',
+						'next_tag_open'		=>	'<li>',
+						'next_tag_close'	=>	'</li>',
+						'prev_tag_open'		=>	'<li>',
+						'prev_tag_close'	=>	'</li>',
+						'num_tag_open'		=>	'<li>',
+						'num_tag_close'		=>	'</li>',
+						'cur_tag_open'		=>	"<li class='active'><a>",
+						'cur_tag_close'		=>	'</a></li>',
+					];
+		
+		$this->pagination->initialize($config);
+		
+		$User_Temp = $this->Nair->_userPagination('nair_temple',['Post_By'=>$this->session->userdata('UserName')], $config['per_page'], $this->uri->segment(3));
+		//$this->prd($User_Temp);
+		$this->load->view('usertemp',['User_Temp'=>$User_Temp]);
+	}
+	
+	public function changPass()
+	{	
+		if ($this->input->post())
+		{
+			if($this->form_validation->run('changePass') )
+				{
+						$oldPass = md5( $this->input->post('old_password') );
+						$newPass = $this->input->post('new_password');
+						$result = $this->Nair->_getSingleData('tbl_users',["user_id"=>$this->session->userdata('user_id')]);
+						
+							$data = array(
+										"user_password" => md5($newPass),
+										"user_param" => md5(rand(100,999))
+									 );
+									 
+							if($oldPass != $result->user_password)
+					 		{
+								$this->session->set_flashdata('error_msg',"Old Password not match. Try again...");
+								return redirect('user/changPass');
+									
+							}else if( $this->Nair->_update("tbl_users",$data,["user_id"=>$this->session->userdata('user_id')]) )
+							{
+									$this->session->set_flashdata('error_msg',"Failed to change password, Please try again");
+									return redirect('user/changPass');
+							}else{
+									$this->session->set_flashdata('error_msg',"Password change successful");
+									return redirect('user/dashboard');
+											
+							}
+				}
+				$this->load->view('changePass');
+		}else{
+			$this->load->view('changePass');
+		}	
+		
+	}
+	
+	public function login()
+	{
+		if ($this->session->userdata('user_id','UserName'))
+        { 
+            redirect('index/dashboard');
+        }
+		$this->load->view('login');
+	}
+	public function login_home()
+	{
+		
+		$this->load->library('form_validation');
+		// Validation form fields
+		$this->form_validation->set_error_delimiters('<div class="red-left">', '</div>');
+		
+				if($this->form_validation->run('Home_Login'))
+				{	
+					$user_email=$this->input->post('user_email');
+					$user_password= $this->myHash($this->input->post('user_password'));
+					//$this->prd($user_password);	
+						
+					$this->load->model('loginmodel');
+					$result= $this->loginmodel->rootLogin($user_email, $user_password);
+					//$this->prd($UserData);
+					
+					if($user_email != $result->user_email || $user_password != $result->user_password)
+					{
+						$this->session->set_flashdata('login_failed','Invalid Username or password'); 
+						return redirect('index/login');	
+						
+					}else if($result->user_verified ==0)
+					{
+						$this->session->set_flashdata('login_failed','Your account is not verified'); 
+						return redirect('index/login');	
+					}else if($result->user_is_blocked ==0)
+					{
+						$this->session->set_flashdata('login_failed','Your account is blocked'); 
+						return redirect('index/login');	
+					}else{
+						
+						$this->session->set_userdata(['user_id'=>$result->user_id, 'UserName'=>$result->user_fname.' '.$result->user_lname]);
+						return redirect('user/dashboard');	
+					}
+						
+				}
+				$this->load->view('login');
+	
+	
+	}
+	
+	public function register()
+	{
+		if ($this->input->post())
+		{
+			$this->load->helper('security');
+			$user_email = $this->input->post('user_email');
+			$result = $this->Nair->_getMultiData('tbl_users',["user_email"=>$user_email]);
+			if(is_array($result) && count($result) > 0)
+				{
+					$this->session->set_flashdata("errorMsg",'This email id already exists.'); 
+					//return redirect('index/register');	
+					$this->load->view('register');
+				 }else{
+					
+					if($this->form_validation->run('User_Reg') )
+					{
+						$data = array(
+										"user_fname" => $this->input->post('user_fname'),
+										"user_lname" => $this->input->post('user_lname'),
+										"user_email" => $this->input->post('user_email'),
+										"user_password" => $this->myHash($this->input->post('user_password')),
+										"user_param" => $this->myHash(rand(100,999))
+									 );
+						//$this->prd($data);
+						
+						if( $this->Nair->_insert("tbl_users",$data) ){
+			   				$this->session->set_flashdata('errorMsg',"Account created successful");
+			  			 	return redirect('index/register');
+						}else{
+							$this->session->set_flashdata('errorMsg',"Failed to created account, Please try again");
+							return redirect('index/register');
+						}
+//======================= Loading Image Library and Config ========================================
+					}
+					$this->load->view('register');
+				
+				}
+		
+		}else{
+			$this->load->view('register');
+		}
+	}
+	
+	public function search()
+	{
+		$District_Name = $this->input->post('District_Name');
+		$CityName = $this->input->post('CityName');
+		//$this->prd($CityName);
+		
+		return redirect("index/search_results/$District_Name/$CityName");
+	}
+	
+	public function search_results( $District_Name, $CityName)
+	{	
+		// echo $District_Name.' '.$CityName; //exit;
+		$NewsData = $this->Nair->_tblmt('nair_news','Yes','rand()','4' );
+		$this->load->library('pagination');
+
+		$config = [
+			'base_url'			=>	base_url("index/search_results/$District_Name/$CityName"),
+			'per_page'			=>	4,
+			'total_rows'		=>	$this->Nair->home_num_rows(['District_Name'=>$District_Name,'EngName'=>$CityName]),
+			'full_tag_open'		=>	"<ul class='pagination'>",
+			'full_tag_close'	=>	"</ul>",
+			'first_tag_open'	=>	'<li>',
+			'uri_segment'		=>	5,
+			'first_tag_close'	=>	'</li>',
+			'last_tag_open'		=>	'<li>',
+			'last_tag_close'	=>	'</li>',
+			'next_tag_open'		=>	'<li>',
+			'next_tag_close'	=>	'</li>',
+			'prev_tag_open'		=>	'<li>',
+			'prev_tag_close'	=>	'</li>',
+			'num_tag_open'		=>	'<li>',
+			'num_tag_close'		=>	'</li>',
+			'cur_tag_open'		=>	"<li class='active'><a>",
+			'cur_tag_close'		=>	'</a></li>',
+		];
+		
+		$this->pagination->initialize($config);
+
+
+$Search_List = $this->Nair->_homePagination(['District_Name'=>$District_Name,'EngName'=>$CityName], $config['per_page'], $this->uri->segment(5));
+
+		//$articles = $this->articles->search( $query, $config['per_page'], $this->uri->segment(5));
+		$this->load->view('search_results',['Search_List'=>$Search_List, 'NewsData'=>$NewsData]);
+		
+		/*$ArticalVal = $this->Nair->_getMultiData('tbl_mukhiya', ['District_Name'=>$District_Name,'City_Place'=>$CityName]);
+		$this->prd($ArticalVal);*/	
+			
+	}
+	
+	public function admin_login()
+	{
+		$this->load->library('form_validation');
+		// Validation form fields
+		$this->form_validation->set_error_delimiters('<div class="red-left">', '</div>');
+		
+		if($this->form_validation->run('signup'))
+		{	
+			$username=$this->input->post('username');
+			$password=$this->myHash($this->input->post('password'));
+			
+			$this->load->model('loginmodel');
+			$Userid= $this->loginmodel->login_valid($username, $password);
+			
+			if($Userid){
+				//credentials valid login..
+				$this->session->set_userdata('Userid',$Userid);
+				return redirect('admin/admin/dashboard');
+			}else{
+				// authentication failed..
+				$this->session->set_flashdata('login_failed','Invalid Username or password');
+				return redirect('admin/admin');
+			}
+
+		}else{
+			
+			$this->load->view('admin/admin');
+		}
+		
+	}
+
+	public function dashboard(){
+		if ( ! $this->session->userdata('Userid'))
+        { 
+            redirect('admin/admin');
+        }
+		$this->load->view('admin/dashboard');
+	}
+
+	public function admin_logout()
+	{	
+		$this->session->unset_userdata('Userid');
+		return redirect('admin/admin');
+	}
+	
+	$wherecondition='';
+		if (!empty($arr['job_keywords'])) {
+			$wherecondition .= " and (job_title like '%" .$arr['job_keywords']."%' or job_keywords like '%".$arr['job_keywords']."%' )";
+		}
+		
+	
+	<?php 
+$this->load->library('session');
+if($error = $this->session->flashdata('error_msg')) {?> 
+<div class="page-title">
+     <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <strong><?php echo $error ?></strong> 
+</div> 
+</div>
+<?php } ?>
